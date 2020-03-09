@@ -30,6 +30,13 @@
             <EditText
                 android:id="@+id/etName"
                 android:text="Name" />
+
+            <Button
+                android:id="@+id/send_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="openGMail"
+                android:text="Send Email" />
         </TableRow>
 
         <TableRow
@@ -43,6 +50,14 @@
             <EditText
                 android:id="@+id/etPhone"
                 android:text="Phone" />
+
+            <Button
+                android:id="@+id/dial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="openDialer"
+                android:text="Dial" />
+
         </TableRow>
 
         <TableRow
@@ -56,6 +71,18 @@
             <CheckBox
                 android:id="@+id/cbFavorite"
                 android:checked="false" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/facebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="openFacebook"
+                android:text="facebook" />
         </TableRow>
 
         <!--
@@ -76,7 +103,6 @@
         </TableRow>
         -->
     </TableLayout>
-
 
 
 </LinearLayout>
