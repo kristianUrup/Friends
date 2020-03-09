@@ -22,6 +22,8 @@ public class DetailActivity extends AppCompatActivity {
     EditText etPhone;
     CheckBox cbFavorite;
 
+    BEFriend friend;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +42,11 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setGUI()
     {
-        BEFriend f = (BEFriend) getIntent().getSerializableExtra("friend");
+        friend = (BEFriend) getIntent().getSerializableExtra("friend");
 
-        etName.setText(f.getName());
-        etPhone.setText(f.getPhone());
-        cbFavorite.setChecked(f.isFavorite());
+        etName.setText(friend.getName());
+        etPhone.setText(friend.getPhone());
+        cbFavorite.setChecked(friend.isFavorite());
     }
 
     public void openGMail(View view){
@@ -54,5 +56,11 @@ public class DetailActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TEXT, "Link is \n" +
                 "This is the body of hte message");
         startActivity(Intent.createChooser(intent, ""));
+    }
+
+    public void openDialer(View view){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel" + friend.getPhone()));
+        startActivity(intent);
     }
 }
