@@ -63,4 +63,13 @@ public class DetailActivity extends AppCompatActivity {
         intent.setData(Uri.parse("tel" + friend.getPhone()));
         startActivity(intent);
     }
+
+    public void openFacebook(View view){
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/1787040838249981"));
+            startActivity(intent);
+        } catch(Exception e) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/kristian.urup")));
+        }
+    }
 }
