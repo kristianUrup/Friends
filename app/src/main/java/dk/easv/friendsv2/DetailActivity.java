@@ -1,26 +1,37 @@
 package dk.easv.friendsv2;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcelable;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TableRow;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import dk.easv.friendsv2.Model.BEFriend;
 
 public class DetailActivity extends AppCompatActivity {
 
     String TAG = MainActivity.TAG;
+    private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 101;
+    static int PERMISSION_REQUEST_CODE = 1;
 
     EditText etName;
     EditText etPhone;
     CheckBox cbFavorite;
+    ImageView imgProfilePic;
 
     BEFriend friend;
 
@@ -29,12 +40,22 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        checkPermission();
+
         Log.d(TAG, "Detail Activity started");
 
         etName = findViewById(R.id.etName);
         etPhone = findViewById(R.id.etPhone);
         cbFavorite = findViewById(R.id.cbFavorite);
+        imgProfilePic = findViewById(R.id.imgProfilePic);
 
+        imgProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture();
+            }
+        });
         setGUI();
 
 
@@ -47,6 +68,23 @@ public class DetailActivity extends AppCompatActivity {
         etName.setText(friend.getName());
         etPhone.setText(friend.getPhone());
         cbFavorite.setChecked(friend.isFavorite());
+    }
+
+    private void checkPermission() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
+            return;
+        }
+
+        ArrayList<String> permissions = new ArrayList<String>();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.CAMERA);
+        }
+        if (permissions.size() > 0) {
+            ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]), PERMISSION_REQUEST_CODE);
+        }
     }
 
     public void openGMail(View view){
@@ -70,6 +108,32 @@ public class DetailActivity extends AppCompatActivity {
             startActivity(intent);
         } catch(Exception e) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/kristian.urup")));
+        }
+    }
+
+    private void takePicture() {
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP);
+        } else
+            Log.d(TAG, "camera app could NOT be started");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP) {
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                Log.d(TAG, "Size of bitmap = " + imageBitmap.getByteCount());
+                int height = imgProfilePic.getHeight();
+                int width = imgProfilePic.getWidth();
+                imgProfilePic.setImageBitmap(imageBitmap);
+                imgProfilePic.setLayoutParams(new TableRow.LayoutParams(height, width));
+            }
         }
     }
 }
