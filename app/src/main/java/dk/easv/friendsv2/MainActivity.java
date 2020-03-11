@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import dk.easv.friendsv2.Model.BEFriend;
+import dk.easv.friendsv2.Model.CustomAdapter;
 import dk.easv.friendsv2.Model.Friends;
 
 public class MainActivity extends ListActivity {
@@ -34,7 +35,9 @@ public class MainActivity extends ListActivity {
                         android.R.layout.simple_list_item_1,
                         friends);
 
-        setListAdapter(adapter);
+        CustomAdapter adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1);
+
+        setListAdapter(adapter1);
 
     }
 

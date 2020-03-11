@@ -4,12 +4,16 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -17,6 +21,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableRow;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -133,7 +140,22 @@ public class DetailActivity extends AppCompatActivity {
                 int width = imgProfilePic.getWidth();
                 imgProfilePic.setImageBitmap(imageBitmap);
                 imgProfilePic.setLayoutParams(new TableRow.LayoutParams(height, width));
+                imageToString(imageBitmap);
             }
         }
+    }
+
+    private void imageToString(Bitmap bitmap){
+        //BitmapDrawable drawableBit = (BitmapDrawable) imgProfilePic.getDrawable();
+        //Bitmap bitmap = drawableBit.getBitmap();
+        String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
+        friend.setImage(encodedImage);
+    }
+
+    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
+    {
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+        image.compress(compressFormat, quality, byteArrayOS);
+        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
 }
