@@ -30,10 +30,6 @@ public class MainActivity extends ListActivity {
 
         friends = m_friends.getNames();
 
-        ListAdapter adapter =
-                new ArrayAdapter<String>(this,
-                        android.R.layout.simple_list_item_1,
-                        friends);
 
         CustomAdapter adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1);
 

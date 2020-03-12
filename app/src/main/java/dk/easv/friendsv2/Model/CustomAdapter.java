@@ -44,21 +44,20 @@ public class CustomAdapter extends ArrayAdapter<BEFriend> {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
 
         BEFriend friend = friends.m_friends.get(position);
+
         txtName.setText(friend.getName());
 
-        Bitmap bitmap = decodeBase64(friend.getImage() );
+        Bitmap bitmap = decodeBase64(friend.getImage());
         imageView.setImageBitmap(bitmap);
         imageView.setLayoutParams(params);
 
         return view;
-
-
-
     }
 
     public static Bitmap decodeBase64(String input)
     {
-        byte[] decodedBytes = Base64.decode(input,Base64.URL_SAFE);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        byte[] decodedBytes = Base64.decode(input,Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length );
+        return bitmap;
     }
 }
