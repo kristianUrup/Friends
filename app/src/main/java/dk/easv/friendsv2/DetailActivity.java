@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,8 +40,11 @@ public class DetailActivity extends AppCompatActivity {
     EditText etPhone;
     CheckBox cbFavorite;
     ImageView imgProfilePic;
+    Button btnOK;
+    Button btnCancel;
 
     BEFriend friend;
+    int friendPosInListView;
 
 
     @Override
@@ -56,6 +60,11 @@ public class DetailActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etPhone);
         cbFavorite = findViewById(R.id.cbFavorite);
         imgProfilePic = findViewById(R.id.imgProfilePic);
+        btnOK = findViewById(R.id.btnOK);
+        btnCancel = findViewById(R.id.btnCancel);
+
+        setGUI();
+        friendPosInListView = getIntent().getExtras().getInt("position");
 
         imgProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +72,20 @@ public class DetailActivity extends AppCompatActivity {
                 takePicture();
             }
         });
-        setGUI();
 
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickOK();
+            }
+        });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickCancel();
+            }
+        });
     }
 
     private void setGUI()
@@ -158,4 +178,22 @@ public class DetailActivity extends AppCompatActivity {
         image.compress(compressFormat, quality, byteArrayOS);
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
+
+    private void onClickOK() {
+        Intent intent = new Intent();
+        String base64Pic = friend.getImage();
+        friend = new BEFriend(etName.getText().toString(),
+                etPhone.getText().toString(),
+                base64Pic);
+        intent.putExtra("position", friendPosInListView);
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    private void onClickCancel() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
+
 }
