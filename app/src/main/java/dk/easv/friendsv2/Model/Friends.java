@@ -54,4 +54,8 @@ public class Friends {
 		return res;
 	}
 
+	public void update(BEFriend friend, int position) {
+		m_friends.set(position, friend);
+	}
+
 }

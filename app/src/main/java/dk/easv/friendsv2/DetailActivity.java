@@ -180,6 +180,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void onClickOK() {
+        Log.d(TAG, "Clicked OKAY");
         Intent intent = new Intent();
         String base64Pic = friend.getImage();
         friend = new BEFriend(etName.getText().toString(),
@@ -187,11 +188,12 @@ public class DetailActivity extends AppCompatActivity {
                 base64Pic);
         intent.putExtra("friend", friend);
         intent.putExtra("position", friendPosInListView);
-        setResult(RESULT_OK);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
     private void onClickCancel() {
+        Log.d(TAG, "Clicked CANCEL");
         setResult(RESULT_CANCELED);
         finish();
     }

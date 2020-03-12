@@ -19,6 +19,7 @@ public class MainActivity extends ListActivity {
     public static String TAG = "Friend2";
 
     Friends m_friends;
+    CustomAdapter adapter1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends ListActivity {
         friends = m_friends.getNames();
 
 
-        CustomAdapter adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1);
+        adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1);
 
         setListAdapter(adapter1);
 
@@ -47,7 +48,7 @@ public class MainActivity extends ListActivity {
         BEFriend friend = m_friends.getAll().get(position);
         addData(x, friend);
         x.putExtra("position", position);
-        startActivity(x);
+        startActivityForResult(x, 10);
         Log.d(TAG, "Detail activity is started");
 
     }
@@ -59,8 +60,13 @@ public class MainActivity extends ListActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "Got result back");
         if (resultCode == RESULT_OK) {
-
+            BEFriend updatedFriend = (BEFriend) data.getExtras().getSerializable("friend");
+            int position = data.getExtras().getInt("position");
+            Log.d(TAG, "Updated friend: " + updatedFriend.getName());
+            m_friends.update(updatedFriend, position);
+            adapter1.notifyDataSetChanged();
             //WIP
         }
     }
