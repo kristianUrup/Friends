@@ -44,6 +44,7 @@ public class DetailActivity extends AppCompatActivity {
     Button btnCancel;
 
     BEFriend friend;
+    int friendPosInListView;
 
 
     @Override
@@ -62,13 +63,15 @@ public class DetailActivity extends AppCompatActivity {
         btnOK = findViewById(R.id.btnOK);
         btnCancel = findViewById(R.id.btnCancel);
 
+        setGUI();
+        friendPosInListView = getIntent().getExtras().getInt("position");
+
         imgProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePicture();
             }
         });
-        setGUI();
 
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,11 +180,19 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void onClickOK() {
-
+        Intent intent = new Intent();
+        String base64Pic = friend.getImage();
+        friend = new BEFriend(etName.getText().toString(),
+                etPhone.getText().toString(),
+                base64Pic);
+        intent.putExtra("position", friendPosInListView);
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void onClickCancel() {
-
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
 

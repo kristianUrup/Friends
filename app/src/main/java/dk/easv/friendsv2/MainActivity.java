@@ -50,6 +50,7 @@ public class MainActivity extends ListActivity {
         Log.d(TAG, "Detail activity will be started");
         BEFriend friend = m_friends.getAll().get(position);
         addData(x, friend);
+        x.putExtra("position", position);
         startActivity(x);
         Log.d(TAG, "Detail activity is started");
 
