@@ -39,9 +39,13 @@ public class CustomAdapter extends ArrayAdapter<BEFriend> {
         TextView txtName = view.findViewById(R.id.txtName1);
         ImageView imageView = view.findViewById(R.id.image_profile);
 
-        int width = 200;
-        int height = width;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
+        int defaultHeight = 200;
+        int imageWidth = defaultHeight;
+        int imageHeight = defaultHeight;
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(imageWidth,imageHeight);
+        int txtViewWidth = 1230;
+        int txtViewHeight = defaultHeight;
+        LinearLayout.LayoutParams txtViewParams = new LinearLayout.LayoutParams(txtViewWidth, txtViewHeight);
 
         BEFriend friend = friends.m_friends.get(position);
 
@@ -49,7 +53,8 @@ public class CustomAdapter extends ArrayAdapter<BEFriend> {
 
         Bitmap bitmap = decodeBase64(friend.getImage());
         imageView.setImageBitmap(bitmap);
-        imageView.setLayoutParams(params);
+        imageView.setLayoutParams(imageParams);
+        txtName.setLayoutParams(txtViewParams);
 
         return view;
     }
