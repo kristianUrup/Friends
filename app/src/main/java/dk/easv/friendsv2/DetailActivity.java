@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +40,8 @@ public class DetailActivity extends AppCompatActivity {
     EditText etPhone;
     CheckBox cbFavorite;
     ImageView imgProfilePic;
+    Button btnOK;
+    Button btnCancel;
 
     BEFriend friend;
 
@@ -56,6 +59,8 @@ public class DetailActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etPhone);
         cbFavorite = findViewById(R.id.cbFavorite);
         imgProfilePic = findViewById(R.id.imgProfilePic);
+        btnOK = findViewById(R.id.btnOK);
+        btnCancel = findViewById(R.id.btnCancel);
 
         imgProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +70,19 @@ public class DetailActivity extends AppCompatActivity {
         });
         setGUI();
 
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickOK();
+            }
+        });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickCancel();
+            }
+        });
     }
 
     private void setGUI()
@@ -158,4 +175,14 @@ public class DetailActivity extends AppCompatActivity {
         image.compress(compressFormat, quality, byteArrayOS);
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
+
+    private void onClickOK() {
+
+    }
+
+    private void onClickCancel() {
+
+    }
+
+
 }
