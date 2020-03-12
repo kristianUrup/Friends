@@ -185,6 +185,7 @@ public class DetailActivity extends AppCompatActivity {
         friend = new BEFriend(etName.getText().toString(),
                 etPhone.getText().toString(),
                 base64Pic);
+        intent.putExtra("friend", friend);
         intent.putExtra("position", friendPosInListView);
         setResult(RESULT_OK);
         finish();

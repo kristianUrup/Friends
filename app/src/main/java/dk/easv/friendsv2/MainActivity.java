@@ -61,6 +61,11 @@ public class MainActivity extends ListActivity {
         x.putExtra("friend", f);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
 
-
+            //WIP
+        }
+    }
 }
