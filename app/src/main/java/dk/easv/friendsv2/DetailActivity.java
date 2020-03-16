@@ -96,11 +96,10 @@ public class DetailActivity extends AppCompatActivity {
         etName.setText(friend.getName());
         etPhone.setText(friend.getPhone());
         cbFavorite.setChecked(friend.isFavorite());
-        
+
         byte[] decodedBytes = Base64.decode(friend.getImage(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length );
         imgProfilePic.setImageBitmap(bitmap);
-
     }
 
     private void checkPermission() {
