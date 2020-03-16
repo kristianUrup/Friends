@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableRow;
 
 import java.io.ByteArrayOutputStream;
@@ -97,9 +98,14 @@ public class DetailActivity extends AppCompatActivity {
         etPhone.setText(friend.getPhone());
         cbFavorite.setChecked(friend.isFavorite());
 
+        int imageWidth = 300;
+        int imageHeight = imageWidth;
+        TableRow.LayoutParams imageParams = new TableRow.LayoutParams(imageWidth,imageHeight);
+
         byte[] decodedBytes = Base64.decode(friend.getImage(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length );
         imgProfilePic.setImageBitmap(bitmap);
+        imgProfilePic.setLayoutParams(imageParams);
     }
 
     private void checkPermission() {
