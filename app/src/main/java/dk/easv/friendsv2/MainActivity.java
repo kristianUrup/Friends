@@ -64,10 +64,8 @@ public class MainActivity extends ListActivity {
         if (resultCode == RESULT_OK) {
             BEFriend updatedFriend = (BEFriend) data.getExtras().getSerializable("friend");
             int position = data.getExtras().getInt("position");
-            Log.d(TAG, "Updated friend: " + updatedFriend.getName());
+            Log.d(TAG, "Updated friend: " + updatedFriend.getName() + " " + updatedFriend.getImage() + " " + updatedFriend.getPhone());
             m_friends.update(updatedFriend, position);
-            adapter1.notifyDataSetChanged();
-            //WIP
         }
     }
 }
