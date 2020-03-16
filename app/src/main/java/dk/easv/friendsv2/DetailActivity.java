@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -95,6 +96,11 @@ public class DetailActivity extends AppCompatActivity {
         etName.setText(friend.getName());
         etPhone.setText(friend.getPhone());
         cbFavorite.setChecked(friend.isFavorite());
+        
+        byte[] decodedBytes = Base64.decode(friend.getImage(), Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length );
+        imgProfilePic.setImageBitmap(bitmap);
+
     }
 
     private void checkPermission() {
