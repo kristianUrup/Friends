@@ -18,9 +18,9 @@ import dk.easv.friendsv2.R;
 public class CustomAdapter extends ArrayAdapter<BEFriend> {
 
     Friends friends;
-    public CustomAdapter(@NonNull Context context, int resource) {
+    public CustomAdapter(@NonNull Context context, int resource, Friends _friends) {
         super(context, resource);
-        friends = new Friends();
+        friends = _friends;
     }
     @Override
     public int getCount() {

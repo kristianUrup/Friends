@@ -27,12 +27,7 @@ public class MainActivity extends ListActivity {
         this.setTitle("Friends v2");
         m_friends = new Friends();
 
-        String[] friends;
-
-        friends = m_friends.getNames();
-
-
-        adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1);
+        adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1, m_friends);
 
         setListAdapter(adapter1);
 
