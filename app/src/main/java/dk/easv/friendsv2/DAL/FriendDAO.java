@@ -16,6 +16,18 @@ public class FriendDAO implements IFriendDAO {
     private static final int DATABASE_VERSION = 2;
     private static final String TABLE_NAME = "Friend";
 
+    private SQLiteDatabase mDatabase;
+    private SQLiteStatement insertStmt;
+
+    public FriendDAO(Context ctx){
+        OpenHelper openHelper = new OpenHelper(ctx);
+        mDatabase = openHelper.getWritableDatabase();
+
+        String INSERT = "insert into " + TABLE_NAME
+                + "(name) values (?)";
+
+        insertStmt = mDatabase.compileStatement(INSERT);
+    }
 
     @Override
     public long create(BEFriend friend) {
@@ -39,6 +51,13 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public BEFriend getFriendById(int id) {
+        Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name","isFavorite","image"},
+                "",null,null,null,null);
+        if(cursor.moveToFirst()){
+            do{
+                new BEFriend(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
+            }
+        }
         return null;
     }
 
