@@ -1,5 +1,6 @@
 package dk.easv.friendsv2.DAL;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -140,7 +141,12 @@ public class FriendDAO implements IFriendDAO {
             m_friends.add(new BEFriend("Theis", "123456", defaultImage));
             m_friends.add(new BEFriend("Thorbjørn", "234567", defaultImage));
             for (BEFriend friend: m_friends) {
-
+                ContentValues values = new ContentValues();
+                values.put("name", friend.getName());
+                values.put("phone", friend.getPhone());
+                values.put("isFavorite", String.valueOf(friend.isFavorite()));
+                values.put("image", friend.getImage());
+                db.insert(TABLE_NAME, null, values);
             }
 
         }
