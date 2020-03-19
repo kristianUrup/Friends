@@ -16,8 +16,19 @@ public class BEFriend implements Serializable {
         this(id, name, phone, false, image);
     }
 
+    public BEFriend(String name, String phone, String image) {
+        this(name, phone, false, image);
+    }
+
     public BEFriend(int id, String name, String phone, Boolean isFavorite, String image) {
         m_id = id;
+        m_name = name;
+        m_phone = phone;
+        m_isFavorite = isFavorite;
+        m_image = image;
+    }
+
+    public BEFriend(String name, String phone, Boolean isFavorite, String image) {
         m_name = name;
         m_phone = phone;
         m_isFavorite = isFavorite;

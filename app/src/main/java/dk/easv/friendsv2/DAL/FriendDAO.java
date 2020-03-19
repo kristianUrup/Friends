@@ -27,7 +27,7 @@ public class FriendDAO implements IFriendDAO {
         mDatabase = openHelper.getWritableDatabase();
 
         String INSERT = "insert into " + TABLE_NAME
-                + "(name) values (?)";
+                + "(name, phone, isDefault, image) values (?,?,?,?)";
 
         insertStmt = mDatabase.compileStatement(INSERT);
     }
@@ -59,7 +59,7 @@ public class FriendDAO implements IFriendDAO {
         if(cursor.moveToFirst()){
             do{
                 new BEFriend(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
-            }
+            }while(cursor.moveToNext());
         }
         return null;
     }
