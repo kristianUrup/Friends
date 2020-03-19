@@ -22,6 +22,8 @@ import android.widget.TableRow;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
+import dk.easv.friendsv2.DAL.FriendDAO;
+import dk.easv.friendsv2.DAL.IFriendDAO;
 import dk.easv.friendsv2.Model.BEFriend;
 import dk.easv.friendsv2.R;
 
@@ -38,9 +40,14 @@ public class DetailActivity extends AppCompatActivity {
     Button btnOK;
     Button btnCancel;
 
+    IFriendDAO fDao;
+
     BEFriend friend;
     int friendPosInListView;
 
+    public DetailActivity(IFriendDAO friendDao){
+        fDao = friendDao;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +92,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setGUI()
     {
-        friend = (BEFriend) getIntent().getSerializableExtra("friend");
+        friend = fDao.getFriendById(getIntent().getExtras().getInt("id"));
 
         etName.setText(friend.getName());
         etPhone.setText(friend.getPhone());

@@ -58,9 +58,9 @@ public class FriendDAO implements IFriendDAO {
     }
 
     @Override
-    public BEFriend getFriendById(int id,String start) {
+    public BEFriend getFriendById(int id) {
         Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name","phone", "isFavorite", "image"},
-                "id = (?)",new String[] {start},null,null,null);
+                "id = (?)",new String[] {Integer.toString(id)},null,null,null);
         if(cursor.moveToFirst()){
             do{
                 int friendID = cursor.getInt(0);
@@ -83,7 +83,7 @@ public class FriendDAO implements IFriendDAO {
     }
 
     private static class OpenHelper extends SQLiteOpenHelper {
-        ArrayList<BEFriend> m_friends;
+        public ArrayList<BEFriend> m_friends;
 
         OpenHelper(Context context)
         {
