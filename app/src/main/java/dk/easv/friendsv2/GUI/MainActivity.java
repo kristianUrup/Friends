@@ -41,7 +41,6 @@ public class MainActivity extends ListActivity {
         BEFriend friend = m_friends.getAll().get(position);
         addData(x, friend);
         x.putExtra("position", position);
-        x.putExtra("id",friend.getId)
         startActivityForResult(x, 10);
         Log.d(TAG, "Detail activity is started");
 
@@ -49,7 +48,7 @@ public class MainActivity extends ListActivity {
 
     private void addData(Intent x, BEFriend f)
     {
-        x.putExtra("friend", f);
+        x.putExtra("id", f.getId());
     }
 
     @Override

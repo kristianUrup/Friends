@@ -97,7 +97,7 @@ public class FriendDAO implements IFriendDAO {
     }
 
     private static class OpenHelper extends SQLiteOpenHelper {
-        ArrayList<BEFriend> m_friends;
+        public ArrayList<BEFriend> m_friends;
 
         OpenHelper(Context context)
         {
