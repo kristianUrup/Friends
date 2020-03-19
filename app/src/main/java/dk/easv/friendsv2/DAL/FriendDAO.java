@@ -30,11 +30,11 @@ public class FriendDAO implements IFriendDAO {
         mDatabase = openHelper.getWritableDatabase();
 
         String INSERT = "insert into " + TABLE_NAME
-                + "(name, phone, isDefault, image) values (?,?,?,?)";
+                + "(name, phone, isFavorite, image) values (?,?,?,?)";
         String UPDATE = "UPDATE " + TABLE_NAME
                 + " SET name = ?,"
                 + " phone = ?,"
-                + " isDefault = ?,"
+                + " isFavorite = ?,"
                 + " image = ?"
                 + " WHERE id = ?";
 
@@ -68,22 +68,24 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public BEFriend getFriendById(int id) {
+        BEFriend friend = new BEFriend(id, "bla","bla",true,"image");
         Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name","phone", "isFavorite", "image"},
                 "id = (?)",new String[] {Integer.toString(id)},null,null,null);
         if(cursor.moveToFirst()){
-            do{
                 int friendID = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String phone = cursor.getString(2);
                 boolean isFavorite = (cursor.getString(3).equals("true"));
                 String image = cursor.getString(4);
-                new BEFriend(friendID, name, phone, isFavorite, image);
-            }while(cursor.moveToNext());
+                friend.setName(name);
+                friend.setPhone(phone);
+                friend.setIsFavorite(isFavorite);
+                friend.setImage(image);
         }
         if(!cursor.isClosed()){
             cursor.close();
         }
-        return null;
+        return friend;
     }
 
     @Override

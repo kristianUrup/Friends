@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import dk.easv.friendsv2.DAL.FriendDAO;
+import dk.easv.friendsv2.DAL.FriendDataAccess;
 import dk.easv.friendsv2.DAL.IFriendDAO;
 import dk.easv.friendsv2.Model.BEFriend;
 import dk.easv.friendsv2.R;
@@ -45,14 +46,12 @@ public class DetailActivity extends AppCompatActivity {
     BEFriend friend;
     int friendPosInListView;
 
-    public DetailActivity(IFriendDAO friendDao){
-        fDao = friendDao;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        fDao = FriendDataAccess.getInstance(this);
 
         checkPermission();
 

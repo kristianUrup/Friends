@@ -59,10 +59,6 @@ public class BEFriend implements Serializable {
         this.m_image = image;
     }
 
-    public int getId(){
-        return m_id;
-    }
-
     public void setId(int id){
         this.m_id = id;
     }
