@@ -13,18 +13,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import dk.easv.friendsv2.R;
 
 public class CustomAdapter extends ArrayAdapter<BEFriend> {
 
-    Friends friends;
-    public CustomAdapter(@NonNull Context context, int resource, Friends _friends) {
+    List<BEFriend> friends;
+    public CustomAdapter(@NonNull Context context, int resource, List<BEFriend> _friends) {
         super(context, resource);
         friends = _friends;
     }
     @Override
     public int getCount() {
-        return friends.m_friends.size();
+        return friends.size();
     }
 
     LayoutInflater getLayoutInflater(){
@@ -47,7 +49,7 @@ public class CustomAdapter extends ArrayAdapter<BEFriend> {
         int txtViewHeight = defaultHeight;
         LinearLayout.LayoutParams txtViewParams = new LinearLayout.LayoutParams(txtViewWidth, txtViewHeight);
 
-        BEFriend friend = friends.m_friends.get(position);
+        BEFriend friend = friends.get(position);
 
         txtName.setText(friend.getName());
 

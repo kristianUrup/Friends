@@ -7,6 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
+import java.util.List;
+
+import dk.easv.friendsv2.DAL.FriendDAO;
+import dk.easv.friendsv2.DAL.FriendDataAccess;
 import dk.easv.friendsv2.GUI.DetailActivity;
 import dk.easv.friendsv2.Model.BEFriend;
 import dk.easv.friendsv2.Model.CustomAdapter;
@@ -16,16 +20,18 @@ public class MainActivity extends ListActivity {
 
     public static String TAG = "Friend2";
 
-    Friends m_friends;
+    FriendDAO fDao;
+    List<BEFriend> friends;
     CustomAdapter adapter1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTitle("Friends v2");
-        m_friends = new Friends();
 
-        adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1, m_friends);
+        fDao = (FriendDAO) FriendDataAccess.getInstance(this);
+        friends = fDao.getAllFriends();
+        adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1, friends);
 
         setListAdapter(adapter1);
 
@@ -38,7 +44,7 @@ public class MainActivity extends ListActivity {
 
         Intent x = new Intent(this, DetailActivity.class);
         Log.d(TAG, "Detail activity will be started");
-        BEFriend friend = m_friends.getAll().get(position);
+        BEFriend friend = friends.get(position);
         addData(x, friend);
         x.putExtra("position", position);
         startActivityForResult(x, 10);
@@ -58,7 +64,7 @@ public class MainActivity extends ListActivity {
             BEFriend updatedFriend = (BEFriend) data.getExtras().getSerializable("friend");
             int position = data.getExtras().getInt("position");
             Log.d(TAG, "Updated friend: " + updatedFriend.getName() + " " + updatedFriend.getImage() + " " + updatedFriend.getPhone());
-            m_friends.update(updatedFriend, position);
+            fDao.update(updatedFriend);
         }
     }
 }
