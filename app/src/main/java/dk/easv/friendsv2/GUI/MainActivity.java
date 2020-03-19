@@ -1,15 +1,13 @@
-package dk.easv.friendsv2;
+package dk.easv.friendsv2.GUI;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import dk.easv.friendsv2.GUI.DetailActivity;
 import dk.easv.friendsv2.Model.BEFriend;
 import dk.easv.friendsv2.Model.CustomAdapter;
 import dk.easv.friendsv2.Model.Friends;
