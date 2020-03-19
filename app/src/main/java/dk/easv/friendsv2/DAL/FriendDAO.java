@@ -34,7 +34,11 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public long create(BEFriend friend) {
-        return 0;
+        insertStmt.bindString(1, friend.getName());
+        insertStmt.bindString(2, friend.getPhone());
+        insertStmt.bindString(3, String.valueOf(friend.isFavorite()));
+        insertStmt.bindString(4, friend.getImage());
+        return insertStmt.executeInsert();
     }
 
     @Override
