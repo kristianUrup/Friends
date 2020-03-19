@@ -35,6 +35,10 @@ public class BEFriend implements Serializable {
         m_image = image;
     }
 
+    public int getId() {
+        return m_id;
+    }
+
     public String getPhone() {
         return m_phone;
     }

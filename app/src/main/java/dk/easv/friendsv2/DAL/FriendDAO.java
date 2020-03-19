@@ -21,6 +21,7 @@ public class FriendDAO implements IFriendDAO {
 
     private SQLiteDatabase mDatabase;
     private SQLiteStatement insertStmt;
+    private SQLiteStatement updateStmt;
 
     public FriendDAO(Context ctx){
         OpenHelper openHelper = new OpenHelper(ctx);
@@ -28,8 +29,15 @@ public class FriendDAO implements IFriendDAO {
 
         String INSERT = "insert into " + TABLE_NAME
                 + "(name, phone, isDefault, image) values (?,?,?,?)";
+        String UPDATE = "UPDATE " + TABLE_NAME
+                + " SET name = ?,"
+                + " phone = ?,"
+                + " isDefault = ?,"
+                + " image = ?"
+                + " WHERE id = ?";
 
         insertStmt = mDatabase.compileStatement(INSERT);
+        updateStmt = mDatabase.compileStatement(UPDATE);
     }
 
     @Override
@@ -57,9 +65,9 @@ public class FriendDAO implements IFriendDAO {
     }
 
     @Override
-    public BEFriend getFriendById(int id,String start) {
+    public BEFriend getFriendById(int id) {
         Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name","phone", "isFavorite", "image"},
-                "id = (?)",new String[] {start},null,null,null);
+                "id = (?)",new String[] {Integer.toString(id)},null,null,null);
         if(cursor.moveToFirst()){
             do{
                 int friendID = cursor.getInt(0);
@@ -79,6 +87,11 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public void update(BEFriend friendToUpdate) {
+        updateStmt.bindString(1, friendToUpdate.getName());
+        updateStmt.bindString(2, friendToUpdate.getPhone());
+        updateStmt.bindString(3, String.valueOf(friendToUpdate.isFavorite()));
+        updateStmt.bindString(4, friendToUpdate.getImage());
+        updateStmt.bindLong(5, friendToUpdate.getId());
 
     }
 

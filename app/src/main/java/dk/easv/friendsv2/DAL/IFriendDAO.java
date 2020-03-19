@@ -9,6 +9,6 @@ public interface IFriendDAO {
     void deleteById(int id);
     void deleteAll();
     List<BEFriend> getAllFriends();
-    BEFriend getFriendById(int id, String start);
+    BEFriend getFriendById(int id);
     void update(BEFriend friendToUpdate);
 }
