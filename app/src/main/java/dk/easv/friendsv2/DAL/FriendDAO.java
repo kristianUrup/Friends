@@ -5,8 +5,9 @@ import java.util.List;
 import dk.easv.friendsv2.Model.BEFriend;
 
 public class FriendDAO implements IFriendDAO {
+
     @Override
-    public long insert(BEFriend friend) {
+    public long create(BEFriend friend) {
         return 0;
     }
 
