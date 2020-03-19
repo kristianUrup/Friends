@@ -41,7 +41,7 @@ public class MainActivity extends ListActivity {
         BEFriend friend = m_friends.getAll().get(position);
         addData(x, friend);
         x.putExtra("position", position);
-        x.putExtra("id",friend.getId)
+        x.putExtra("id",friend.getId());
         startActivityForResult(x, 10);
         Log.d(TAG, "Detail activity is started");
 

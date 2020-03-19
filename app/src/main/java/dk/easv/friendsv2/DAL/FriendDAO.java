@@ -30,7 +30,7 @@ public class FriendDAO implements IFriendDAO {
         mDatabase = openHelper.getWritableDatabase();
 
         String INSERT = "insert into " + TABLE_NAME
-                + "(name, phone, isDefault, image) values (?,?,?,?)";
+                + "(name, phone, isFavorite, image) values (?,?,?,?)";
         String UPDATE = "UPDATE " + TABLE_NAME
                 + " SET name = ?,"
                 + " phone = ?,"
