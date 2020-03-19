@@ -6,8 +6,9 @@ import dk.easv.friendsv2.Model.BEFriend;
 
 public interface IFriendDAO {
     long create(BEFriend friend);
-    void deleteById();
+    void deleteById(int id);
     void deleteAll();
-    List<BEFriend> selectAll();
+    List<BEFriend> getAllFriends();
+    BEFriend getFriendById(int id);
     void update(BEFriend friendToUpdate);
 }
