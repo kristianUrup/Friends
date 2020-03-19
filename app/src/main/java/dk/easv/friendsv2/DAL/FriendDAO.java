@@ -1,5 +1,9 @@
 package dk.easv.friendsv2.DAL;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
+
 import java.util.List;
 
 import android.content.Context;
@@ -10,7 +14,6 @@ import android.database.sqlite.SQLiteStatement;
 import dk.easv.friendsv2.Model.BEFriend;
 
 public class FriendDAO implements IFriendDAO {
-
 
     private static final String DATABASE_NAME = "sqlite.mDatabase";
     private static final int DATABASE_VERSION = 2;
