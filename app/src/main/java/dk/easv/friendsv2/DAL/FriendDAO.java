@@ -50,13 +50,16 @@ public class FriendDAO implements IFriendDAO {
     }
 
     @Override
-    public BEFriend getFriendById(int id) {
+    public BEFriend getFriendById(int id,String start) {
         Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name","isFavorite","image"},
-                "",null,null,null,null);
+                "id = (?)",new String[] {start},null,null,null);
         if(cursor.moveToFirst()){
             do{
-                new BEFriend(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
-            }
+                return new BEFriend(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
+            }while(cursor.moveToNext());
+        }
+        if(!cursor.isClosed()){
+            cursor.close();
         }
         return null;
     }
