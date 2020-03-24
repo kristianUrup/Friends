@@ -24,6 +24,7 @@ public class FriendDAO implements IFriendDAO {
     private SQLiteDatabase mDatabase;
     private SQLiteStatement insertStmt;
     private SQLiteStatement updateStmt;
+    private SQLiteStatement deleteStmt;
 
     public FriendDAO(Context ctx){
         OpenHelper openHelper = new OpenHelper(ctx);
@@ -31,6 +32,7 @@ public class FriendDAO implements IFriendDAO {
 
         String INSERT = "insert into " + TABLE_NAME
                 + "(name, phone, isFavorite, image) values (?,?,?,?)";
+
         String UPDATE = "UPDATE " + TABLE_NAME
                 + " SET name = ?,"
                 + " phone = ?,"
@@ -38,6 +40,9 @@ public class FriendDAO implements IFriendDAO {
                 + " image = ?"
                 + " WHERE id = ?";
 
+        String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE id = (?)";
+
+        deleteStmt = mDatabase.compileStatement(DELETE);
         insertStmt = mDatabase.compileStatement(INSERT);
         updateStmt = mDatabase.compileStatement(UPDATE);
     }
@@ -53,7 +58,6 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public void deleteById(int id) {
-
     }
 
     @Override
@@ -68,7 +72,6 @@ public class FriendDAO implements IFriendDAO {
                 null, null, null, null, "name");
         if(cursor.moveToFirst()){
             do{
-
                 int friendId = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String phone = cursor.getString(2);
