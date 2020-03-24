@@ -96,6 +96,7 @@ public class FriendDAO implements IFriendDAO {
                 String phone = cursor.getString(2);
                 boolean isFavorite = (cursor.getString(3).equals("true"));
                 String image = cursor.getString(4);
+                friend.setId(friendID);
                 friend.setName(name);
                 friend.setPhone(phone);
                 friend.setIsFavorite(isFavorite);
@@ -114,7 +115,7 @@ public class FriendDAO implements IFriendDAO {
         updateStmt.bindString(3, String.valueOf(friendToUpdate.isFavorite()));
         updateStmt.bindString(4, friendToUpdate.getImage());
         updateStmt.bindLong(5, friendToUpdate.getId());
-
+        updateStmt.executeUpdateDelete();
     }
 
     private static class OpenHelper extends SQLiteOpenHelper {

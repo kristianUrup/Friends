@@ -191,14 +191,12 @@ public class DetailActivity extends AppCompatActivity {
 
     private void onClickOK() {
         Log.d(TAG, "Clicked OKAY");
-        Intent intent = new Intent();
+        setResult(RESULT_OK);
         String base64Pic = friend.getImage();
-        friend = new BEFriend(etName.getText().toString(),
+        friend = new BEFriend(friend.getId(), etName.getText().toString(),
                 etPhone.getText().toString(),
                 base64Pic);
-        intent.putExtra("friend", friend);
-        intent.putExtra("position", friendPosInListView);
-        setResult(RESULT_OK, intent);
+        fDao.update(friend);
         finish();
     }
 
