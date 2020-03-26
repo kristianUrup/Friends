@@ -11,6 +11,9 @@ public class BEFriend implements Serializable {
     private String m_phone;
     private Boolean m_isFavorite;
     private String m_image;
+    private String address;
+    private double latitude;
+    private double longtitude;
 
     public BEFriend(int id, String name, String phone, String image) {
         this(id, name, phone, false, image);
@@ -55,6 +58,12 @@ public class BEFriend implements Serializable {
         return m_isFavorite;
     }
 
+    public double getLatitude() { return latitude; }
+
+    public double getLongtitude() { return longtitude; }
+
+    public String getAddress() { return address; }
+
     public void setImage(String image) {
         this.m_image = image;
     }
@@ -74,6 +83,12 @@ public class BEFriend implements Serializable {
     public void setIsFavorite(boolean isFavorite) {
         this.m_isFavorite = isFavorite;
     }
+
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+
+    public void setLongtitude(double longtitude) { this.longtitude = longtitude; }
+
+    public void setAdress(String address) { this.address = address; }
 
 
 }

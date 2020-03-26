@@ -1,10 +1,14 @@
 package dk.easv.friendsv2.GUI;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -26,6 +31,7 @@ import dk.easv.friendsv2.DAL.FriendDAO;
 import dk.easv.friendsv2.DAL.FriendDataAccess;
 import dk.easv.friendsv2.DAL.IFriendDAO;
 import dk.easv.friendsv2.Model.BEFriend;
+import dk.easv.friendsv2.Model.LocationTracker;
 import dk.easv.friendsv2.R;
 
 public class DetailActivity extends AppCompatActivity {
@@ -41,8 +47,12 @@ public class DetailActivity extends AppCompatActivity {
     Button btnOK;
     Button btnCancel;
     Button btnDeleteFriend;
+    Button btnHome;
+    Button btnMap;
 
     IFriendDAO fDao;
+    LocationTracker locationTracker;
+    LocationManager locationManager;
 
     BEFriend friend;
     int friendPosInListView;
@@ -53,6 +63,8 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         fDao = FriendDataAccess.getInstance(this);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationTracker = new LocationTracker(this);
 
         checkPermission();
 
@@ -65,6 +77,8 @@ public class DetailActivity extends AppCompatActivity {
         btnOK = findViewById(R.id.btnOK);
         btnCancel = findViewById(R.id.btnCancel);
         btnDeleteFriend = findViewById(R.id.delete_friend);
+        btnHome = findViewById(R.id.btnHome);
+        btnMap = findViewById(R.id.btnCancel);
 
         setGUI();
         friendPosInListView = getIntent().getExtras().getInt("position");
@@ -96,10 +110,20 @@ public class DetailActivity extends AppCompatActivity {
                 deleteFriend(view);
             }
         });
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFriendsLocation();
+            }
+        });
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
     }
 
-    private void setGUI()
-    {
+    private void setGUI() {
         friend = fDao.getFriendById(getIntent().getExtras().getInt("id"));
 
         etName.setText(friend.getName());
@@ -108,10 +132,10 @@ public class DetailActivity extends AppCompatActivity {
 
         int imageWidth = 300;
         int imageHeight = imageWidth;
-        TableRow.LayoutParams imageParams = new TableRow.LayoutParams(imageWidth,imageHeight);
+        TableRow.LayoutParams imageParams = new TableRow.LayoutParams(imageWidth, imageHeight);
 
         byte[] decodedBytes = Base64.decode(friend.getImage(), Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length );
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
         imgProfilePic.setImageBitmap(bitmap);
         imgProfilePic.setLayoutParams(imageParams);
     }
@@ -128,12 +152,15 @@ public class DetailActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.CAMERA);
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
         if (permissions.size() > 0) {
             ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]), PERMISSION_REQUEST_CODE);
         }
     }
 
-    public void openGMail(View view){
+    public void openGMail(View view) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Emailing link");
@@ -142,17 +169,17 @@ public class DetailActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(intent, ""));
     }
 
-    public void openDialer(View view){
+    public void openDialer(View view) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel" + friend.getPhone()));
         startActivity(intent);
     }
 
-    public void openFacebook(View view){
+    public void openFacebook(View view) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/1787040838249981"));
             startActivity(intent);
-        } catch(Exception e) {
+        } catch (Exception e) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/kristian.urup")));
         }
     }
@@ -184,15 +211,14 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void imageToString(Bitmap bitmap){
+    private void imageToString(Bitmap bitmap) {
         //BitmapDrawable drawableBit = (BitmapDrawable) imgProfilePic.getDrawable();
         //Bitmap bitmap = drawableBit.getBitmap();
         String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
         friend.setImage(encodedImage);
     }
 
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
-    {
+    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         image.compress(compressFormat, quality, byteArrayOS);
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
@@ -200,14 +226,12 @@ public class DetailActivity extends AppCompatActivity {
 
     private void onClickOK() {
         Log.d(TAG, "Clicked OKAY");
-        Intent intent = new Intent();
+        setResult(RESULT_OK);
         String base64Pic = friend.getImage();
-        friend = new BEFriend(etName.getText().toString(),
+        friend = new BEFriend(friend.getId(), etName.getText().toString(),
                 etPhone.getText().toString(),
                 base64Pic);
-        intent.putExtra("friend", friend);
-        intent.putExtra("position", friendPosInListView);
-        setResult(RESULT_OK, intent);
+        fDao.update(friend);
         finish();
     }
 
@@ -217,11 +241,36 @@ public class DetailActivity extends AppCompatActivity {
         finish();
     }
 
-    private void deleteFriend(View view){
+    private void deleteFriend(View view) {
         fDao.deleteById(friend.getId());
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
 
+    private void getFriendsLocation() {
+
+        locationTracker.startLocationUpdate();
+
+        if (locationTracker.canGetLocation()) {
+            Location location = locationTracker.getLocation();
+
+            if (location != null) {
+                friend.setLatitude(location.getLatitude());
+                friend.setLongtitude(location.getLongitude());
+                Log.d(TAG, "location on friend was set. Latitude: "
+                        + friend.getLatitude() + " and Longtitude: " + friend.getLongtitude());
+            } else {
+                Toast.makeText(getApplicationContext(), "Location is null. Something went wrong",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationTracker.stopLocationUpdate();
+        Log.d(TAG, "Stopped tracking location");
+    }
 }

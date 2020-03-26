@@ -95,19 +95,20 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public BEFriend getFriendById(int id) {
-        BEFriend friend = new BEFriend(id, "bla", "bla", true, "image");
-        Cursor cursor = mDatabase.query(TABLE_NAME, new String[]{"id", "name", "phone", "isFavorite", "image"},
-                "id = (?)", new String[]{Integer.toString(id)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            int friendID = cursor.getInt(0);
-            String name = cursor.getString(1);
-            String phone = cursor.getString(2);
-            boolean isFavorite = (cursor.getString(3).equals("true"));
-            String image = cursor.getString(4);
-            friend.setName(name);
-            friend.setPhone(phone);
-            friend.setIsFavorite(isFavorite);
-            friend.setImage(image);
+        BEFriend friend = new BEFriend(id, "bla","bla",true,"image");
+        Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name","phone", "isFavorite", "image"},
+                "id = (?)",new String[] {Integer.toString(id)},null,null,null);
+        if(cursor.moveToFirst()){
+                int friendID = cursor.getInt(0);
+                String name = cursor.getString(1);
+                String phone = cursor.getString(2);
+                boolean isFavorite = (cursor.getString(3).equals("true"));
+                String image = cursor.getString(4);
+                friend.setId(friendID);
+                friend.setName(name);
+                friend.setPhone(phone);
+                friend.setIsFavorite(isFavorite);
+                friend.setImage(image);
         }
         if (!cursor.isClosed()) {
             cursor.close();
@@ -122,7 +123,7 @@ public class FriendDAO implements IFriendDAO {
         updateStmt.bindString(3, String.valueOf(friendToUpdate.isFavorite()));
         updateStmt.bindString(4, friendToUpdate.getImage());
         updateStmt.bindLong(5, friendToUpdate.getId());
-
+        updateStmt.executeUpdateDelete();
     }
 
     private static class OpenHelper extends SQLiteOpenHelper {
