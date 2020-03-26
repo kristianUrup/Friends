@@ -71,12 +71,6 @@ public class FriendDAO implements IFriendDAO {
     }
 
     @Override
-    public void deleteAll() {
-
-
-    }
-
-    @Override
     public List<BEFriend> getAllFriends() {
         List<BEFriend> listOfFriends = new ArrayList<>();
         Cursor cursor = mDatabase.query(TABLE_NAME, new String[]{"id", "name", "phone", "isFavorite", "image"},
