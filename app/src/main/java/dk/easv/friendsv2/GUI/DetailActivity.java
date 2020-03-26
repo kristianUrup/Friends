@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -30,6 +31,7 @@ import dk.easv.friendsv2.DAL.FriendDAO;
 import dk.easv.friendsv2.DAL.FriendDataAccess;
 import dk.easv.friendsv2.DAL.IFriendDAO;
 import dk.easv.friendsv2.Model.BEFriend;
+import dk.easv.friendsv2.Model.LocationTracker;
 import dk.easv.friendsv2.R;
 
 public class DetailActivity extends AppCompatActivity {
@@ -48,6 +50,7 @@ public class DetailActivity extends AppCompatActivity {
     Button btnMap;
 
     IFriendDAO fDao;
+    LocationTracker locationTracker;
     LocationManager locationManager;
 
     BEFriend friend;
@@ -60,6 +63,7 @@ public class DetailActivity extends AppCompatActivity {
 
         fDao = FriendDataAccess.getInstance(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationTracker = new LocationTracker(this);
 
         checkPermission();
 
@@ -235,26 +239,27 @@ public class DetailActivity extends AppCompatActivity {
 
     private void getFriendsLocation() {
 
-        Boolean GPSPermissionGiven = true;
+        locationTracker.startLocationUpdate();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            GPSPermissionGiven = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
-                    PackageManager.PERMISSION_GRANTED;
-        }
+        if (locationTracker.canGetLocation()) {
+            Location location = locationTracker.getLocation();
 
-        Location location = GPSPermissionGiven ? locationManager
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER): null;
-
-        if (location != null) {
-            friend.setLatitude(location.getLatitude());
-            friend.setLongtitude(location.getLongitude());
-            Log.d(TAG, "location on friend was set. Latitude: "
-                    + location.getLatitude() + " and Longtitude: " + location.getLongitude());
-        }else {
-            Toast.makeText(getApplicationContext(), "Permission for location was not allowed",
-                    Toast.LENGTH_LONG).show();
+            if (location != null) {
+                friend.setLatitude(location.getLatitude());
+                friend.setLongtitude(location.getLongitude());
+                Log.d(TAG, "location on friend was set. Latitude: "
+                        + friend.getLatitude() + " and Longtitude: " + friend.getLongtitude());
+            }else {
+                Toast.makeText(getApplicationContext(), "Location is null. Something went wrong",
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationTracker.stopLocationUpdate();
+        Log.d(TAG, "Stopped tracking location");
+    }
 }
