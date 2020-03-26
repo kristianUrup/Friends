@@ -1,10 +1,13 @@
 package dk.easv.friendsv2.GUI;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -40,8 +44,11 @@ public class DetailActivity extends AppCompatActivity {
     ImageView imgProfilePic;
     Button btnOK;
     Button btnCancel;
+    Button btnHome;
+    Button btnMap;
 
     IFriendDAO fDao;
+    LocationManager locationManager;
 
     BEFriend friend;
     int friendPosInListView;
@@ -52,6 +59,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         fDao = FriendDataAccess.getInstance(this);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         checkPermission();
 
@@ -63,6 +71,8 @@ public class DetailActivity extends AppCompatActivity {
         imgProfilePic = findViewById(R.id.imgProfilePic);
         btnOK = findViewById(R.id.btnOK);
         btnCancel = findViewById(R.id.btnCancel);
+        btnHome = findViewById(R.id.btnHome);
+        btnMap = findViewById(R.id.btnCancel);
 
         setGUI();
         friendPosInListView = getIntent().getExtras().getInt("position");
@@ -85,6 +95,20 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onClickCancel();
+            }
+        });
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFriendsLocation();
+            }
+        });
+
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
@@ -118,6 +142,9 @@ public class DetailActivity extends AppCompatActivity {
         }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.CAMERA);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
         if (permissions.size() > 0) {
             ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]), PERMISSION_REQUEST_CODE);
@@ -204,6 +231,29 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "Clicked CANCEL");
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    private void getFriendsLocation() {
+
+        Boolean GPSPermissionGiven = true;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            GPSPermissionGiven = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED;
+        }
+
+        Location location = GPSPermissionGiven ? locationManager
+                .getLastKnownLocation(LocationManager.GPS_PROVIDER): null;
+
+        if (location != null) {
+            friend.setLatitude(location.getLatitude());
+            friend.setLongtitude(location.getLongitude());
+            Log.d(TAG, "location on friend was set. Latitude: "
+                    + location.getLatitude() + " and Longtitude: " + location.getLongitude());
+        }else {
+            Toast.makeText(getApplicationContext(), "Permission for location was not allowed",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
 
