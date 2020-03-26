@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+
 import dk.easv.friendsv2.Model.BEFriend;
 
 public class FriendDAO implements IFriendDAO {
@@ -26,7 +27,7 @@ public class FriendDAO implements IFriendDAO {
     private SQLiteStatement updateStmt;
     private SQLiteStatement deleteStmt;
 
-    public FriendDAO(Context ctx){
+    public FriendDAO(Context ctx) {
         OpenHelper openHelper = new OpenHelper(ctx);
         mDatabase = openHelper.getWritableDatabase();
 
@@ -40,7 +41,7 @@ public class FriendDAO implements IFriendDAO {
                 + " image = ?"
                 + " WHERE id = ?";
 
-        String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE id = (?)";
+        String DELETE = "DELETE FROM " + TABLE_NAME;
 
         deleteStmt = mDatabase.compileStatement(DELETE);
         insertStmt = mDatabase.compileStatement(INSERT);
@@ -58,20 +59,30 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public void deleteById(int id) {
+        Cursor cursor = mDatabase.query(TABLE_NAME, new String[]{"id", "name", "phone", "isFavorite", "image"},
+                null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+
+            mDatabase.delete(TABLE_NAME, "id = (?)", new String[]{Integer.toString(id)});
+        }
+        if(!cursor.isClosed()){
+            cursor.close();
+        }
     }
 
     @Override
     public void deleteAll() {
+
 
     }
 
     @Override
     public List<BEFriend> getAllFriends() {
         List<BEFriend> listOfFriends = new ArrayList<>();
-        Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name", "phone", "isFavorite", "image"},
+        Cursor cursor = mDatabase.query(TABLE_NAME, new String[]{"id", "name", "phone", "isFavorite", "image"},
                 null, null, null, null, "name");
-        if(cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 int friendId = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String phone = cursor.getString(2);
@@ -79,9 +90,9 @@ public class FriendDAO implements IFriendDAO {
                 String image = cursor.getString(4);
                 BEFriend friend = new BEFriend(friendId, name, phone, isFavorite, image);
                 listOfFriends.add(friend);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
 
-            if(!cursor.isClosed()){
+            if (!cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -90,21 +101,21 @@ public class FriendDAO implements IFriendDAO {
 
     @Override
     public BEFriend getFriendById(int id) {
-        BEFriend friend = new BEFriend(id, "bla","bla",true,"image");
-        Cursor cursor = mDatabase.query(TABLE_NAME, new String[] {"id","name","phone", "isFavorite", "image"},
-                "id = (?)",new String[] {Integer.toString(id)},null,null,null);
-        if(cursor.moveToFirst()){
-                int friendID = cursor.getInt(0);
-                String name = cursor.getString(1);
-                String phone = cursor.getString(2);
-                boolean isFavorite = (cursor.getString(3).equals("true"));
-                String image = cursor.getString(4);
-                friend.setName(name);
-                friend.setPhone(phone);
-                friend.setIsFavorite(isFavorite);
-                friend.setImage(image);
+        BEFriend friend = new BEFriend(id, "bla", "bla", true, "image");
+        Cursor cursor = mDatabase.query(TABLE_NAME, new String[]{"id", "name", "phone", "isFavorite", "image"},
+                "id = (?)", new String[]{Integer.toString(id)}, null, null, null);
+        if (cursor.moveToFirst()) {
+            int friendID = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String phone = cursor.getString(2);
+            boolean isFavorite = (cursor.getString(3).equals("true"));
+            String image = cursor.getString(4);
+            friend.setName(name);
+            friend.setPhone(phone);
+            friend.setIsFavorite(isFavorite);
+            friend.setImage(image);
         }
-        if(!cursor.isClosed()){
+        if (!cursor.isClosed()) {
             cursor.close();
         }
         return friend;
@@ -123,8 +134,7 @@ public class FriendDAO implements IFriendDAO {
     private static class OpenHelper extends SQLiteOpenHelper {
         public ArrayList<BEFriend> m_friends;
 
-        OpenHelper(Context context)
-        {
+        OpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
@@ -164,7 +174,7 @@ public class FriendDAO implements IFriendDAO {
             m_friends.add(new BEFriend("Szymon", "234567", true, defaultImage));
             m_friends.add(new BEFriend("Theis", "123456", defaultImage));
             m_friends.add(new BEFriend("Thorbjørn", "234567", defaultImage));
-            for (BEFriend friend: m_friends) {
+            for (BEFriend friend : m_friends) {
                 ContentValues values = new ContentValues();
                 values.put("name", friend.getName());
                 values.put("phone", friend.getPhone());

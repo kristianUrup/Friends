@@ -40,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
     ImageView imgProfilePic;
     Button btnOK;
     Button btnCancel;
+    Button btnDeleteFriend;
 
     IFriendDAO fDao;
 
@@ -63,6 +64,7 @@ public class DetailActivity extends AppCompatActivity {
         imgProfilePic = findViewById(R.id.imgProfilePic);
         btnOK = findViewById(R.id.btnOK);
         btnCancel = findViewById(R.id.btnCancel);
+        btnDeleteFriend = findViewById(R.id.delete_friend);
 
         setGUI();
         friendPosInListView = getIntent().getExtras().getInt("position");
@@ -85,6 +87,13 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onClickCancel();
+            }
+        });
+
+        btnDeleteFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteFriend(view);
             }
         });
     }
@@ -206,6 +215,12 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "Clicked CANCEL");
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    private void deleteFriend(View view){
+        fDao.deleteById(friend.getId());
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 
