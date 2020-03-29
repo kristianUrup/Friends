@@ -1,11 +1,20 @@
 package dk.easv.friendsv2.GUI;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.ButtonBarLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.widget.AbsoluteLayout;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -15,6 +24,7 @@ import dk.easv.friendsv2.GUI.DetailActivity;
 import dk.easv.friendsv2.Model.BEFriend;
 import dk.easv.friendsv2.Model.CustomAdapter;
 import dk.easv.friendsv2.Model.Friends;
+import dk.easv.friendsv2.R;
 
 public class MainActivity extends ListActivity {
 
@@ -23,18 +33,31 @@ public class MainActivity extends ListActivity {
     FriendDAO fDao;
     List<BEFriend> friends;
     CustomAdapter adapter1;
+    Toolbar toolbar;
+    Button addFriend;
+    ActionBar actionBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTitle("Friends v2");
+        addFriend = new Button(this);
+        addFriend.setOnClickListener(view -> addNewFriend());
+        addFriend.setText("+");
+        addFriend.setTextColor(-1);
+        addFriend.setBackgroundColor(2);
+
+        actionBar = getActionBar();
+        actionBar.setCustomView(R.layout.main_layout);
+
+        ActionBar.LayoutParams actionParams = new ActionBar.LayoutParams(5);
+        actionBar.setCustomView(addFriend, actionParams);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         fDao = (FriendDAO) FriendDataAccess.getInstance(this);
         friends = fDao.getAllFriends();
         adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1, friends);
 
         setListAdapter(adapter1);
-
     }
 
 
@@ -67,5 +90,10 @@ public class MainActivity extends ListActivity {
             Log.d(TAG, "Updated friend: " + updatedFriend.getName() + " " + updatedFriend.getImage() + " " + updatedFriend.getPhone());
             fDao.update(updatedFriend);
         }
+    }
+
+    private void addNewFriend(){
+        Intent intent = new Intent(this, AddFriend.class);
+        startActivity(intent);
     }
 }

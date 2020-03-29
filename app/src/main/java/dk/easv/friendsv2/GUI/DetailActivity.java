@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,7 @@ public class DetailActivity extends AppCompatActivity {
     Button btnOK;
     Button btnCancel;
     Button btnDeleteFriend;
+    Toolbar toolbar;
 
     IFriendDAO fDao;
 
@@ -65,37 +67,20 @@ public class DetailActivity extends AppCompatActivity {
         btnOK = findViewById(R.id.btnOK);
         btnCancel = findViewById(R.id.btnCancel);
         btnDeleteFriend = findViewById(R.id.delete_friend);
+        toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
 
         setGUI();
         friendPosInListView = getIntent().getExtras().getInt("position");
 
-        imgProfilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                takePicture();
-            }
-        });
+        imgProfilePic.setOnClickListener(view -> takePicture());
 
-        btnOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickOK();
-            }
-        });
+        btnOK.setOnClickListener(view -> onClickOK());
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickCancel();
-            }
-        });
+        btnCancel.setOnClickListener(view -> onClickCancel());
 
-        btnDeleteFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteFriend(view);
-            }
-        });
+        btnDeleteFriend.setOnClickListener(view -> deleteFriend(view));
     }
 
     private void setGUI()

@@ -7,13 +7,9 @@
     android:orientation="vertical"
     tools:context=".GUI.DetailActivity">
 
-    <TextView
-        android:id="@+id/tvHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Detail"
-        android:layout_gravity="center"
-        style="@style/Base.TextAppearance.AppCompat.Large"/>
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar"></include>
+
 
     <TableLayout
         android:layout_width="fill_parent"
@@ -21,7 +17,9 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:paddingStart="160dp"
+            android:paddingEnd="150dp">
 
             <ImageView
                 android:id="@+id/imgProfilePic"
@@ -33,7 +31,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dip" >
+            android:paddingTop="40dip" >
 
             <TextView
                 android:text="Name:" />
@@ -53,7 +51,8 @@
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dip" >
+            android:paddingTop="40dip"
+            android:paddingBottom="40dip">
 
             <TextView
                 android:text="Phone:" />
@@ -74,7 +73,8 @@
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dip" >
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <TextView
                 android:text="Favorite:" />
@@ -98,7 +98,9 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
 
             <Button
                 android:id="@+id/btnOK"
