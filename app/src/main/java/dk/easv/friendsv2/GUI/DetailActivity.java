@@ -187,8 +187,10 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "Clicked OKAY");
         Intent intent = new Intent();
         String base64Pic = friend.getImage();
+
         friend = new BEFriend(etName.getText().toString(),
                 etPhone.getText().toString(),
+                cbFavorite.isChecked(),
                 base64Pic);
         intent.putExtra("friend", friend);
         intent.putExtra("position", friendPosInListView);
