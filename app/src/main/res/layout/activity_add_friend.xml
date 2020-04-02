@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_name_add" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/cancel_btn"
         android:layout_width="90dp"
         android:layout_height="50dp"
         android:layout_marginStart="50dp"

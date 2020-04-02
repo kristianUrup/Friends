@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import dk.easv.friendsv2.DAL.FriendDAO;
 import dk.easv.friendsv2.DAL.FriendDataAccess;
 import dk.easv.friendsv2.DAL.IFriendDAO;
 import dk.easv.friendsv2.Model.BEFriend;
@@ -79,14 +77,14 @@ public class DetailActivity extends AppCompatActivity {
         cbFavorite = findViewById(R.id.cbFavorite);
         imgProfilePic = findViewById(R.id.imgProfilePic);
         btnOK = findViewById(R.id.btnOK);
-        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel = findViewById(R.id.btn_cancel);
         btnDeleteFriend = findViewById(R.id.delete_friend);
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
         btnHome = findViewById(R.id.btnHome);
-        btnMap = findViewById(R.id.btnCancel);
+        btnMap = findViewById(R.id.btnMap);
 
 
         setGUI();
@@ -96,7 +94,7 @@ public class DetailActivity extends AppCompatActivity {
 
         btnOK.setOnClickListener(view -> onClickOK());
 
-        btnCancel.setOnClickListener(view -> onClickCancel());
+        btnCancel.setOnClickListener(view -> onClickCancel(view));
 
 
         btnDeleteFriend.setOnClickListener(view -> deleteFriend(view));
@@ -216,10 +214,10 @@ public class DetailActivity extends AppCompatActivity {
         finish();
     }
 
-    private void onClickCancel() {
+    private void onClickCancel(View view) {
         Log.d(TAG, "Clicked CANCEL");
-        setResult(RESULT_CANCELED);
-        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void deleteFriend(View view) {
