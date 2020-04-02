@@ -85,10 +85,9 @@ public class MainActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "Got result back");
         if (resultCode == RESULT_OK) {
-            BEFriend updatedFriend = (BEFriend) data.getExtras().getSerializable("friend");
-            int position = data.getExtras().getInt("position");
-            Log.d(TAG, "Updated friend: " + updatedFriend.getName() + " " + updatedFriend.getImage() + " " + updatedFriend.getPhone());
-            fDao.update(updatedFriend);
+            friends = fDao.getAllFriends();
+            adapter1 = new CustomAdapter(this,android.R.layout.simple_list_item_1, friends);
+            setListAdapter(adapter1);
         }
     }
 
