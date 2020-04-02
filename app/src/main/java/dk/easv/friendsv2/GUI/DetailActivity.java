@@ -99,7 +99,7 @@ public class DetailActivity extends AppCompatActivity {
 
         btnDeleteFriend.setOnClickListener(view -> deleteFriend(view));
         btnHome.setOnClickListener(view -> getFriendsLocation());
-        btnMap.setOnClickListener(view -> { });
+        btnMap.setOnClickListener(view -> onClickMap());
     }
 
     private void setGUI() {
@@ -133,6 +133,9 @@ public class DetailActivity extends AppCompatActivity {
         }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
         if (permissions.size() > 0) {
             ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]), PERMISSION_REQUEST_CODE);
@@ -218,6 +221,11 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "Clicked CANCEL");
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void onClickMap() {
+        Intent map = new Intent(this, MapActivity.class);
+        startActivity(map);
     }
 
     private void deleteFriend(View view) {
