@@ -193,8 +193,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void imageToString(Bitmap bitmap) {
-        //BitmapDrawable drawableBit = (BitmapDrawable) imgProfilePic.getDrawable();
-        //Bitmap bitmap = drawableBit.getBitmap();
         String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
         friend.setImage(encodedImage);
     }
