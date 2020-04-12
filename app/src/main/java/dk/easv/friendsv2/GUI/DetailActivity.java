@@ -96,7 +96,6 @@ public class DetailActivity extends AppCompatActivity {
 
         btnCancel.setOnClickListener(view -> onClickCancel(view));
 
-
         btnDeleteFriend.setOnClickListener(view -> deleteFriend(view));
         btnHome.setOnClickListener(view -> getFriendsLocation());
         btnMap.setOnClickListener(view -> { });
